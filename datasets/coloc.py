@@ -3,6 +3,7 @@ import luigi
 import luigi.contrib.hdfs
 import luigi.contrib.hadoop
 import luigi.contrib.hadoop_jar
+import enum
 from luigi.contrib.hdfs.format import Plain, PlainDir
 
 
@@ -181,6 +182,14 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         jr.libjars = [jar_path]
 
         return jr
+
+    def extra_modules(self):
+        '''
+        Ensure non-standard Python2.7 modules (that Luigi does not already handle) get packaged:
+        :return:
+        '''
+        return [enum]
+
 
 if __name__ == '__main__':
     import logging
