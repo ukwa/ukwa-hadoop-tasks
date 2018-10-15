@@ -4,10 +4,12 @@ import luigi.contrib.hdfs
 import luigi.contrib.hadoop
 import luigi.contrib.hadoop_jar
 from luigi.contrib.hdfs.format import Plain, PlainDir
+import logging
 # Dependencies for packaging:
 import enum
 import botocore
 
+logger = logging.getLogger('luigi-interface')
 
 """
 Part of the Alan Turing Institute collaboration on word embeddings generated via word co-location statistics. 
@@ -157,6 +159,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         :return:
         """
         # Add up the totals:
+        logger.warning("GOT %s -> %s" % (key, values))
         yield key, sum(int(v) for v in values)
 
     def jobconfs(self):
