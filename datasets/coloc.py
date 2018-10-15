@@ -205,4 +205,4 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 #    luigi.run(['datasets.GenerateWordColocations', '--input-file', 'warcs-2017-frequent-aa'])
-    luigi.run(['datasets.GenerateColocDataset', '--input-file', 'warcs-2017-frequent-aa-word-coloc.tsv'])
+    luigi.run(['datasets.GenerateColocDataset', '--input-file', 'coloc-test.tsv'])
