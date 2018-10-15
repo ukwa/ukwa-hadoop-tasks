@@ -141,9 +141,9 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         parts = line.split('\t')
         # Processing a term frequency line, making field count consistent:
         if len(parts) == 3:
-            yield "freqn-%s\t%s\t\t%s" % (parts[0], parts[1], parts[2])
+            yield "freqn-%s\t%s\t\t" % (parts[0], parts[1]), parts[2]
         else:
-            yield "coloc-%s" % line
+            yield "coloc-%s\t%s\t%s\t" % (parts[0], parts[1], parts[2]), parts[3]
 
     def reducer(self, key, values):
         """
