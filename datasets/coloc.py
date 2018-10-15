@@ -112,7 +112,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
 
 
     # Override the default output format, so we can rename the outputs based on teh first key:
-    output_format = "uk.bl.wa.hadoop.mapreduce.io.NamedByFirstKeyMultiOutputFormat"
+    #output_format = "uk.bl.wa.hadoop.mapreduce.io.NamedByFirstKeyMultiOutputFormat"
     # Overide number of reducers
     n_reduce_tasks = 1
 
