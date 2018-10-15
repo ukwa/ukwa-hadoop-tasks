@@ -173,12 +173,12 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         '''
         jc = super(GenerateColocDataset, self).jobconfs()
         # Ensure only the filename-defining part of the key (first value) is used for partitioning:
-        jc.append("map.output.key.field.separator=.")
-        jc.append("mapred.text.key.partitioner.options=-k1,1")
+        #jc.append("mapred.text.key.partitioner.options=-k1,1")
         # Ensure the first three fields are all treated as the key:
-        jc.append("stream.num.map.output.key.fields=3")
+        #jc.append("map.output.key.field.separator=.")
+        #jc.append("stream.num.map.output.key.fields=3")
         # Compress the output and the mapper output:
-        jc.append("mapred.output.compress=true")
+        jc.append("mapred.output.compress=false")
         jc.append("mapred.compress.map.output=true")
         jc.append("mapred.output.compression.codec=org.apache.hadoop.io.compress.GzipCodec")
 
