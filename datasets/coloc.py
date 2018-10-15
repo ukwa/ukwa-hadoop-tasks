@@ -113,6 +113,8 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
 
     # Override the default output format, so we can rename the outputs based on teh first key:
     output_format = "uk.bl.wa.hadoop.mapreduce.io.NamedByFirstKeyMultiOutputFormat"
+    # Overide number of reducers
+    n_reduce_tasks = 1
 
     def requires(self):
         return PreExistingInputFile(path=self.input_file, from_hdfs=True)
@@ -159,7 +161,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         :return:
         """
         # Add up the totals:
-        logger.warning("GOT %s -> %s" % (key, values))
+        logger.warning("GOT %s -> %s" % (key, " ".join(values)))
         yield key, sum(int(v) for v in values)
 
     def jobconfs(self):
