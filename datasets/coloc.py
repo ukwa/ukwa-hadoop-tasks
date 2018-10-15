@@ -3,8 +3,10 @@ import luigi
 import luigi.contrib.hdfs
 import luigi.contrib.hadoop
 import luigi.contrib.hadoop_jar
-import enum
 from luigi.contrib.hdfs.format import Plain, PlainDir
+# Dependencies for packaging:
+import enum
+import botocore
 
 
 """
@@ -188,7 +190,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         Ensure non-standard Python2.7 modules (that Luigi does not already handle) get packaged:
         :return:
         '''
-        return [enum]
+        return [enum,botocore]
 
 
 if __name__ == '__main__':
