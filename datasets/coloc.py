@@ -161,9 +161,9 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         :return:
         """
         # Add up the totals:
-        logger.warning("GOT %s -> %s" % (key, " ".join(values)))
-        key = key.replace('|','\t')
-        logger.warning("GIV %s -> %s" % (key, " ".join(values)))
+        logger.warning("GOT key %s" % key)
+        key = key.replace('.','\t')
+        logger.warning("GIV key %s" % key)
         yield key, sum(int(v) for v in values)
 
     def jobconfs(self):
