@@ -169,6 +169,10 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         jc.append("mapred.text.key.partitioner.options=-k1,1")
         # Ensure the first three fields are all treated as the key:
         jc.append("stream.num.map.output.key.fields=3")
+        # Compress the output and the mapper output:
+        jc.append("mapred.output.compress=true")
+        jc.append("mapred.compress.map.output=true")
+        jc.append("mapred.output.compression.codec=org.apache.hadoop.io.compress.GzipCodec")
 
         return jc
 
