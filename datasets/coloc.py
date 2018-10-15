@@ -3,6 +3,8 @@ import luigi
 import luigi.contrib.hdfs
 import luigi.contrib.hadoop
 import luigi.contrib.hadoop_jar
+from luigi.contrib.hdfs.format import Plain, PlainDir
+
 
 """
 Part of the Alan Turing Institute collaboration on word embeddings generated via word co-location statistics. 
@@ -99,15 +101,20 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
      - configuring the reducer so the final key and values are defined correctly, meaning the values are integers.
 
     '''
+    input_file = luigi.Parameter()
+    from_hdfs = luigi.BoolParameter(default=True)
+    task_namespace = "datasets"
+
 
     # Override the default output format, so we can rename the outputs based on teh first key:
     output_format = "uk.bl.wa.hadoop.mapreduce.io.NamedByFirstKeyMultiOutputFormat"
 
     def requires(self):
-        pass
+        return PreExistingInputFile(path=self.input_file, from_hdfs=True)
 
     def output(self):
-        pass
+        out_name = "%s-processed" % os.path.splitext(self.input_file)[0]
+        return luigi.contrib.hdfs.HdfsTarget(out_name, format=luigi.contrib.hdfs.Plain)
 
     def mapper(self, line):
         """
@@ -172,4 +179,5 @@ if __name__ == '__main__':
     import logging
 
     logging.getLogger().setLevel(logging.INFO)
-    luigi.run(['datasets.GenerateWordColocations', '--input-file', 'warcs-2017-frequent-aa'])
+#    luigi.run(['datasets.GenerateWordColocations', '--input-file', 'warcs-2017-frequent-aa'])
+    luigi.run(['datasets.GenerateColocDataset', '--input-file', 'warcs-2017-frequent-aa-word-coloc.tsv'])
