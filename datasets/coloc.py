@@ -157,7 +157,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         :return:
         """
         # Add up the totals:
-        yield key, sum(values)
+        yield key, sum(int(v) for v in values)
 
     def jobconfs(self):
         '''
