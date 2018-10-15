@@ -175,7 +175,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         :return:
         '''
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        jar_path = os.path.join(dir_path, "../jars/hadoop-streaming-utils-0.0.1-SNAPSHOT-job.jar")
+        jar_path = os.path.join(dir_path, "../jars/hadoop-streaming-utils-0.0.1-SNAPSHOT.jar")
         # Get the job runner and add the libjar:
         jr = super(GenerateColocDataset, self).job_runner()
         jr.libjars = [jar_path]
