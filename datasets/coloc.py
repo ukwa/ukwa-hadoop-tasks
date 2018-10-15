@@ -157,11 +157,17 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         yield key, sum(values)
 
     def jobconfs(self):
+        '''
+        Extend the job configuration to support the keys and partitioning we want.
+        :return:
+        '''
         jc = super(GenerateColocDataset, self).jobconfs()
         # Ensure only the filename-defining part of the key (first value) is used for partitioning:
         jc.append("mapred.text.key.partitioner.options=-k1,1")
         # Ensure the first three fields are all treated as the key:
         jc.append("stream.num.map.output.key.fields=3")
+
+        return jc
 
     def job_runner(self):
         '''
@@ -173,6 +179,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         # Get the job runner and add the libjar:
         jr = super(GenerateColocDataset, self).job_runner()
         jr.libjars = jar_path
+
         return jr
 
 if __name__ == '__main__':
