@@ -111,10 +111,8 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
     task_namespace = "datasets"
 
 
-    # Override the default output format, so we can rename the outputs based on teh first key:
-    #output_format = "uk.bl.wa.hadoop.mapreduce.io.NamedByFirstKeyMultiOutputFormat"
     # Overide number of reducers
-    n_reduce_tasks = 1
+    n_reduce_tasks = 50
 
     def requires(self):
         return PreExistingInputFile(path=self.input_file, from_hdfs=True)
@@ -175,11 +173,11 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
 
         # Ensure the first three fields are all treated as the key:
         jc.append("map.output.key.field.separator=|")
-        jc.append("stream.num.map.output.key.fields=3")
+        #jc.append("stream.num.map.output.key.fields=3")
         # Ensure only the filename-defining part of the key (first value) is used for partitioning:
         jc.append("mapred.text.key.partitioner.options=-k1,1")
         # Compress the output and the mapper output:
-        jc.append("mapred.output.compress=false")
+        jc.append("mapred.output.compress=true")
         jc.append("mapred.compress.map.output=true")
         jc.append("mapred.output.compression.codec=org.apache.hadoop.io.compress.GzipCodec")
 
@@ -195,6 +193,9 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         # Get the job runner and add the libjar:
         jr = super(GenerateColocDataset, self).job_runner()
         jr.libjars = [jar_path]
+
+        # Override the default output format, so we can rename the outputs based on teh first key:
+        jr.output_format = "uk.bl.wa.hadoop.mapreduce.io.NamedByFirstKeyMultiOutputFormat"
 
         return jr
 
@@ -214,4 +215,4 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 #    luigi.run(['datasets.GenerateWordColocations', '--input-file', 'warcs-2017-frequent-aa'])
-    luigi.run(['datasets.GenerateColocDataset', '--input-file', 'coloc-test.tsv'])
+    luigi.run(['datasets.GenerateColocDataset', '--input-file', 'warcs-2017-frequent-aa-word-coloc.tsv'])
