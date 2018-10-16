@@ -143,9 +143,9 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         parts = line.split('\t')
         # Processing a term frequency line, making field count consistent:
         if len(parts) == 3:
-            yield "freqn-%s.%s" % (parts[0], parts[1]), parts[2]
+            yield "freqn-%s" % parts[0], parts[1], "-", parts[2]
         else:
-            yield "coloc-%s.%s.%s" % (parts[0], parts[1], parts[2]), parts[3]
+            yield "coloc-%s" % parts[0], parts[1], parts[2], parts[3]
 
     def reducer(self, key, values):
         """
@@ -176,7 +176,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         #jc.append("mapred.text.key.partitioner.options=-k1,1")
         # Ensure the first three fields are all treated as the key:
         #jc.append("map.output.key.field.separator=.")
-        #jc.append("stream.num.map.output.key.fields=3")
+        jc.append("stream.num.map.output.key.fields=3")
         # Compress the output and the mapper output:
         jc.append("mapred.output.compress=false")
         jc.append("mapred.compress.map.output=true")
