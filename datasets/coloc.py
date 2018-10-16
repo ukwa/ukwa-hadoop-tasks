@@ -141,7 +141,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         parts = line.split('\t')
         # Processing a term frequency line, making field count consistent:
         if len(parts) == 3:
-            yield "freqn-%s|%s|-" % (parts[0], parts[1]), parts[2]
+            yield "freqn-%s|%s" % (parts[0], parts[1]), parts[2]
         else:
             yield "coloc-%s|%s|%s" % (parts[0], parts[1], parts[2]), parts[3]
 
@@ -159,9 +159,7 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         :return:
         """
         # Add up the totals:
-        logger.warning("GOT key %s" % key)
         key = key.replace('|','\t')
-        logger.warning("GIV key %s" % key)
         yield key, sum(int(v) for v in values)
 
     def jobconfs(self):
