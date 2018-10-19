@@ -110,15 +110,15 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
     from_hdfs = luigi.BoolParameter(default=True)
     task_namespace = "datasets"
 
-
-    # Overide number of reducers
-    n_reduce_tasks = 50
+    # Override number of reducers
+    n_reduce_tasks = 24
 
     def requires(self):
         return PreExistingInputFile(path=self.input_file, from_hdfs=True)
 
     def output(self):
         out_name = "%s-processed" % os.path.splitext(self.input_file)[0]
+        out_name = out_name.replace("*","ALL")
         return luigi.contrib.hdfs.HdfsTarget(out_name, format=luigi.contrib.hdfs.Plain)
 
     def mapper(self, line):
@@ -141,9 +141,9 @@ class GenerateColocDataset(luigi.contrib.hadoop.JobTask):
         parts = line.split('\t')
         # Processing a term frequency line, making field count consistent:
         if len(parts) == 3:
-            yield "freqn-%s|%s" % (parts[0], parts[1]), parts[2]
+            yield "freqn%s|%s" % (parts[0], parts[1]), parts[2]
         else:
-            yield "coloc-%s|%s|%s" % (parts[0], parts[1], parts[2]), parts[3]
+            yield "coloc%s|%s|%s" % (parts[0], parts[1], parts[2]), parts[3]
 
     def reducer(self, key, values):
         """
@@ -213,4 +213,4 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.INFO)
 #    luigi.run(['datasets.GenerateWordColocations', '--input-file', 'warcs-2017-frequent-aa'])
-    luigi.run(['datasets.GenerateColocDataset', '--input-file', 'warcs-2017-frequent-aa-word-coloc.tsv'])
+    luigi.run(['datasets.GenerateColocDataset', '--input-file', 'warcs-2017-frequent-*-word-coloc.tsv'])
