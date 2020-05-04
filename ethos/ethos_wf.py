@@ -16,21 +16,22 @@ class MR_EThOS_WF(MRJob):
     # A simple mapper that parses each document and reduces the content to word frequences
     def mapper(self, _, line):
         doc = json.loads(line)
-        d = defaultdict(int)
-        for word in doc['content'].split():
-            # Drop anything that is pure punctations:
-            if re.match('^\W+$', word):
-                continue
-            word = word.lower()
-            d[word] += 1
-        # Filter out low-frequency works:
-        wf = {}
-        for word in d.keys():
-            if d[word] > 1:
-                wf[word] = d[word]
-        # Store the word frequencies instead of the content.
-        doc.pop('content')
-        doc['word_freq'] = wf
+        if 'content' in doc:
+            d = defaultdict(int)
+            for word in doc['content'].split():
+                # Drop anything that is pure punctations:
+                if re.match('^\W+$', word):
+                    continue
+                word = word.lower()
+                d[word] += 1
+            # Filter out low-frequency works:
+            wf = {}
+            for word in d.keys():
+                if d[word] > 1:
+                    wf[word] = d[word]
+            # Store the word frequencies instead of the content.
+            doc.pop('content')
+            doc['word_freq'] = wf
         yield None, json.dumps(doc)
 
     def reducer(self, key, values):
