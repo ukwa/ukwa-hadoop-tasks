@@ -1,2 +1,14 @@
+cdxj-indexer==1.1.2
+certifi==2020.12.5
+chardet==4.0.0
+filelock==3.0.12
+idna==2.10
 mrjob==0.7.1
 PyYAML==5.3.1
+requests==2.25.1
+requests-file==1.5.1
+six==1.15.0
+surt==0.3.1
+tldextract==3.1.0
+urllib3==1.26.3
+warcio==1.7.4
