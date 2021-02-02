@@ -1,4 +1,4 @@
-rm cdxenv.zip
+rm venv.zip
 cd venv
-zip -r ../cdxenv.zip *
+zip -r ../venv.zip *
 
